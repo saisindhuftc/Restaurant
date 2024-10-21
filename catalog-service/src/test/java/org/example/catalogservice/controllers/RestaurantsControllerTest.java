@@ -59,7 +59,7 @@ class RestaurantsControllerTest {
 
         when(restaurantsService.create(request)).thenReturn(new ResponseEntity<>(HttpStatus.CREATED));
 
-        mvc.perform(post("/api/v1/restaurants")
+        mvc.perform(post("/restaurants")
                 .content(req)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isCreated());
@@ -85,7 +85,7 @@ class RestaurantsControllerTest {
 
         when(restaurantsService.create(request)).thenReturn(new ResponseEntity<>(HttpStatus.CREATED));
 
-        mvc.perform(post("/api/v1/restaurants")
+        mvc.perform(post("/restaurants")
                 .content(req)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isUnauthorized());
@@ -112,7 +112,7 @@ class RestaurantsControllerTest {
 
         when(restaurantsService.create(request)).thenThrow(new RestaurantAlreadyExistsException("Restaurant already exists"));
 
-        mvc.perform(post("/api/v1/restaurants")
+        mvc.perform(post("/restaurants")
                 .content(req)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isBadRequest());
@@ -123,7 +123,7 @@ class RestaurantsControllerTest {
     public void test_fetchAllRestaurants() throws Exception {
         when(restaurantsService.fetchAll()).thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-        mvc.perform(get("/api/v1/restaurants")).andExpect(status().isOk());
+        mvc.perform(get("/restaurants")).andExpect(status().isOk());
         verify(restaurantsService, times(1)).fetchAll();
     }
 
@@ -133,7 +133,7 @@ class RestaurantsControllerTest {
 
         when(restaurantsService.fetchById(restaurantId)).thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-        mvc.perform(get("/api/v1/restaurants/" + restaurantId)).andExpect(status().isOk());
+        mvc.perform(get("/restaurants/" + restaurantId)).andExpect(status().isOk());
         verify(restaurantsService, times(1)).fetchById(restaurantId);
     }
 
@@ -143,7 +143,7 @@ class RestaurantsControllerTest {
 
         when(restaurantsService.fetchById(restaurantId)).thenThrow(new RestaurantNotFoundException("Restaurant not found"));
 
-        mvc.perform(get("/api/v1/restaurants/" + restaurantId)).andExpect(status().isBadRequest());
+        mvc.perform(get("/restaurants/" + restaurantId)).andExpect(status().isBadRequest());
         verify(restaurantsService, times(1)).fetchById(restaurantId);
     }
 }

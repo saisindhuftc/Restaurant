@@ -53,7 +53,7 @@ class ItemsControllerTest {
 
         when(itemsService.add(restaurantId, request)).thenReturn(new ResponseEntity<>(HttpStatus.CREATED));
 
-        mvc.perform(post("/api/v1/restaurants/" + restaurantId + "/items")
+        mvc.perform(post("/restaurants/" + restaurantId + "/items")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(req)
         ).andExpect(status().isCreated());
@@ -69,7 +69,7 @@ class ItemsControllerTest {
         String restaurantId = "abc";
         String req = objectMapper.writeValueAsString(request);
 
-        mvc.perform(post("/api/v1/restaurants/" + restaurantId + "/items")
+        mvc.perform(post("/restaurants/" + restaurantId + "/items")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(req)
         ).andExpect(status().isUnauthorized());
@@ -88,7 +88,7 @@ class ItemsControllerTest {
 
         when(itemsService.add(restaurantId, request)).thenThrow(new RestaurantNotFoundException("Restaurant not found"));
 
-        mvc.perform(post("/api/v1/restaurants/" + restaurantId + "/items")
+        mvc.perform(post("/restaurants/" + restaurantId + "/items")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(req)
         ).andExpect(status().isBadRequest());
@@ -107,7 +107,7 @@ class ItemsControllerTest {
 
         when(itemsService.add(restaurantId, request)).thenThrow(new ItemAlreadyExistsException("Item already exists"));
 
-        mvc.perform(post("/api/v1/restaurants/" + restaurantId + "/items")
+        mvc.perform(post("/restaurants/" + restaurantId + "/items")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(req)
         ).andExpect(status().isBadRequest());
@@ -120,7 +120,7 @@ class ItemsControllerTest {
 
         when(itemsService.fetchAll(restaurantId)).thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-        mvc.perform(get("/api/v1/restaurants/" + restaurantId + "/items")).andExpect(status().isOk());
+        mvc.perform(get("/restaurants/" + restaurantId + "/items")).andExpect(status().isOk());
         verify(itemsService, times(1)).fetchAll(restaurantId);
     }
 
@@ -130,7 +130,7 @@ class ItemsControllerTest {
 
         when(itemsService.fetchAll(restaurantId)).thenThrow(new RestaurantNotFoundException("Restaurant not found"));
 
-        mvc.perform(get("/api/v1/restaurants/" + restaurantId + "/items")).andExpect(status().isBadRequest());
+        mvc.perform(get("/restaurants/" + restaurantId + "/items")).andExpect(status().isBadRequest());
         verify(itemsService, times(1)).fetchAll(restaurantId);
     }
 
@@ -141,7 +141,7 @@ class ItemsControllerTest {
 
         when(itemsService.fetchByName(restaurantId, itemName)).thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-        mvc.perform(get("/api/v1/restaurants/" + restaurantId + "/items/" + itemName)).andExpect(status().isOk());
+        mvc.perform(get("/restaurants/" + restaurantId + "/items/" + itemName)).andExpect(status().isOk());
         verify(itemsService, times(1)).fetchByName(restaurantId, itemName);
     }
 
@@ -152,7 +152,7 @@ class ItemsControllerTest {
 
         when(itemsService.fetchByName(restaurantId, itemName)).thenThrow(new RestaurantNotFoundException("Restaurant not found"));
 
-        mvc.perform(get("/api/v1/restaurants/" + restaurantId + "/items/" + itemName)).andExpect(status().isBadRequest());
+        mvc.perform(get("/restaurants/" + restaurantId + "/items/" + itemName)).andExpect(status().isBadRequest());
         verify(itemsService, times(1)).fetchByName(restaurantId, itemName);
     }
 
@@ -163,7 +163,7 @@ class ItemsControllerTest {
 
         when(itemsService.fetchByName(restaurantId, itemName)).thenThrow(new ItemNotFoundException("Item not found"));
 
-        mvc.perform(get("/api/v1/restaurants/" + restaurantId + "/items/" + itemName)).andExpect(status().isBadRequest());
+        mvc.perform(get("/restaurants/" + restaurantId + "/items/" + itemName)).andExpect(status().isBadRequest());
         verify(itemsService, times(1)).fetchByName(restaurantId, itemName);
     }
 }

@@ -2,6 +2,7 @@ package org.example.catalogservice.controllers;
 
 
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 
 import org.example.catalogservice.dto.ApiResponse;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/restaurants")
+@RequestMapping("/restaurants")
 public class RestaurantsController {
     private final RestaurantsService restaurantsService;
 
