@@ -6,6 +6,7 @@ import org.example.catalogservice.dto.ApiResponse;
 import org.example.catalogservice.dto.RestaurantRequest;
 import org.example.catalogservice.dto.RestaurantResponse;
 import org.example.catalogservice.exceptions.RestaurantAlreadyExistsException;
+import org.example.catalogservice.exceptions.RestaurantNotFoundException;
 import org.example.catalogservice.models.Restaurant;
 import org.example.catalogservice.repositories.RestaurantsRepository;
 import org.springframework.http.HttpStatus;
@@ -67,7 +68,7 @@ public class RestaurantsService {
 
     public ResponseEntity<ApiResponse> fetchById(String id) {
         Restaurant restaurant = restaurantsRepository.findById(id)
-                .orElseThrow(RestaurantNotFoundException::new);
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found"));
 
         ApiResponse response = ApiResponse.builder()
                 .message(FETCHED)

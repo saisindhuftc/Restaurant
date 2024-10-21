@@ -6,6 +6,8 @@ import org.example.catalogservice.dto.ApiResponse;
 import org.example.catalogservice.dto.ItemRequest;
 import org.example.catalogservice.dto.ItemResponse;
 import org.example.catalogservice.exceptions.ItemAlreadyExistsException;
+import org.example.catalogservice.exceptions.ItemNotFoundException;
+import org.example.catalogservice.exceptions.RestaurantNotFoundException;
 import org.example.catalogservice.models.Item;
 import org.example.catalogservice.models.Restaurant;
 import org.example.catalogservice.repositories.ItemsRepository;
@@ -29,7 +31,7 @@ public class ItemsService {
 
     public ResponseEntity<ApiResponse> add(String restaurantId, ItemRequest request) {
         Restaurant restaurant = restaurantsRepository.findById(restaurantId)
-                .orElseThrow(RestaurantNotFoundException::new);
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found"));
 
         if (itemsRepository.existsByNameAndRestaurant(request.getName(), restaurant)) {
             throw new ItemAlreadyExistsException("Item already exists in the given restaurant");
@@ -55,7 +57,7 @@ public class ItemsService {
 
     public ResponseEntity<ApiResponse> fetchAll(String restaurantId) {
         Restaurant restaurant = restaurantsRepository.findById(restaurantId)
-                .orElseThrow(RestaurantNotFoundException::new);
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found"));
 
         List<Item> items = itemsRepository.findAllByRestaurant(restaurant);
         List<ItemResponse> responses = new ArrayList<>();
@@ -75,10 +77,10 @@ public class ItemsService {
 
     public ResponseEntity<ApiResponse> fetchByName(String restaurantId, String itemName) {
         Restaurant restaurant = restaurantsRepository.findById(restaurantId)
-                .orElseThrow(RestaurantNotFoundException::new);
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found"));
 
         Item item = itemsRepository.findByNameAndRestaurant(itemName, restaurant)
-                .orElseThrow(ItemNotFoundException::new);
+                .orElseThrow(() -> new ItemNotFoundException("Item not found"));
 
         ApiResponse response = ApiResponse.builder()
                 .message(FETCHED)
